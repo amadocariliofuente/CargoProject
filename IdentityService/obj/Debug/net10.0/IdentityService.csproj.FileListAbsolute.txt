@@ -8,7 +8,7 @@
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/IdentityService.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/IdentityService.pdb
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Humanizer.dll
-/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.AspNetCore.OpenApi.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.Build.Framework.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.CodeAnalysis.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.CodeAnalysis.CSharp.dll
@@ -21,6 +21,10 @@
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.Design.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.Relational.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.Extensions.DependencyModel.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.IdentityModel.Abstractions.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.IdentityModel.Logging.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.IdentityModel.Tokens.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.OpenApi.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.VisualStudio.SolutionPersistence.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Mono.TextTemplating.dll
@@ -36,6 +40,7 @@
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/System.Composition.Hosting.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/System.Composition.Runtime.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/System.Composition.TypedParts.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/System.IdentityModel.Tokens.Jwt.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/cs/Microsoft.CodeAnalysis.resources.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/de/Microsoft.CodeAnalysis.resources.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/es/Microsoft.CodeAnalysis.resources.dll
@@ -101,6 +106,8 @@
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/tr/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/zh-Hans/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 /home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.xml
 /home/kafka/RiderProjects/CargoProject/IdentityService/obj/Debug/net10.0/IdentityService.csproj.AssemblyReference.cache
 /home/kafka/RiderProjects/CargoProject/IdentityService/obj/Debug/net10.0/rpswa.dswa.cache.json
 /home/kafka/RiderProjects/CargoProject/IdentityService/obj/Debug/net10.0/IdentityService.GeneratedMSBuildEditorConfig.editorconfig
@@ -109,6 +116,7 @@
 /home/kafka/RiderProjects/CargoProject/IdentityService/obj/Debug/net10.0/IdentityService.csproj.CoreCompileInputs.cache
 /home/kafka/RiderProjects/CargoProject/IdentityService/obj/Debug/net10.0/IdentityService.MvcApplicationPartsAssemblyInfo.cs
 /home/kafka/RiderProjects/CargoProject/IdentityService/obj/Debug/net10.0/IdentityService.MvcApplicationPartsAssemblyInfo.cache
+/home/kafka/RiderProjects/CargoProject/IdentityService/obj/Debug/net10.0/IdentityService.sourcelink.json
 /home/kafka/RiderProjects/CargoProject/IdentityService/obj/Debug/net10.0/rjimswa.dswa.cache.json
 /home/kafka/RiderProjects/CargoProject/IdentityService/obj/Debug/net10.0/rjsmrazor.dswa.cache.json
 /home/kafka/RiderProjects/CargoProject/IdentityService/obj/Debug/net10.0/rjsmcshtml.dswa.cache.json
@@ -124,3 +132,16 @@
 /home/kafka/RiderProjects/CargoProject/IdentityService/obj/Debug/net10.0/IdentityService.pdb
 /home/kafka/RiderProjects/CargoProject/IdentityService/obj/Debug/net10.0/IdentityService.genruntimeconfig.cache
 /home/kafka/RiderProjects/CargoProject/IdentityService/obj/Debug/net10.0/ref/IdentityService.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Shared.Contracts.deps.json
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Shared.Contracts.runtimeconfig.json
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Shared.Contracts.staticwebassets.endpoints.json
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Shared.Contracts
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Google.Protobuf.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Grpc.AspNetCore.Server.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Grpc.AspNetCore.Server.ClientFactory.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Grpc.Core.Api.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Grpc.Net.Client.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Grpc.Net.ClientFactory.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Grpc.Net.Common.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Shared.Contracts.dll
+/home/kafka/RiderProjects/CargoProject/IdentityService/bin/Debug/net10.0/Shared.Contracts.pdb

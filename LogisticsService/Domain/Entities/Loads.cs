@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 using LogisticsService.Domain.Enums;
 
 namespace LogisticsService.Domain.Entities;
@@ -32,10 +33,14 @@ public class Loads : Entity
     [Required]
     public DateTime DeliveryDate { get; set; }
     
-    public string VehicleType { get; set; } // Should be public VehicleType VehicleType, but the Vehicle service isn't ready yet
+    public VehicleType VehicleType { get; set; }
+
+    [Required]
+    public bool IsDeleted { get; set; } = false;
     
     [Required]
     public Guid CreatedByUserId { get; set; }
 
     public DateTime CreatedDate { get; set; }
+
 }

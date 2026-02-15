@@ -1,6 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace LogisticsService.Domain.Entities;
 
-public class Entity
+public abstract class Entity
 {
+    [Key]
     public Guid Id { get; set; }
 }

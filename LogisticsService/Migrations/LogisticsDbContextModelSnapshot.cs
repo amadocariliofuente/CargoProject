@@ -53,6 +53,9 @@ namespace LogisticsService.Migrations
                     b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("LoadStatus")
                         .IsRequired()
                         .HasColumnType("text");
@@ -64,9 +67,8 @@ namespace LogisticsService.Migrations
                     b.Property<DateTime>("PickupDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("VehicleType")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("VehicleType")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Weight")
                         .HasColumnType("integer");
@@ -74,6 +76,36 @@ namespace LogisticsService.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Loads");
+                });
+
+            modelBuilder.Entity("LogisticsService.Domain.Entities.Vehicles", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("OwnerUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("VehicleLocation")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("VehiclePlate")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("VehicleSize")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("VehicleType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Vehicles");
                 });
 #pragma warning restore 612, 618
         }

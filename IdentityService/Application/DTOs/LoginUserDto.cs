@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IdentityService.Application.DTOs;
 
-public class LoginDto
+public class LoginUserDto
 {
     [Required]
     public string Email { get; set; }

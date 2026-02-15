@@ -20,6 +20,16 @@ public class AuthController(IUserService userService) : ControllerBase
         if (!result.Success)
             return BadRequest(result.Errors);
 
-        return Ok(result.User); // RegisterUserDto returned
+        return Ok(result.Success); // RegisterUserDto returned
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginUserDto loginUsersDto)
+    {
+        var result = await _userService.LoginAsync(loginUsersDto);
+        if (!result.Success)
+            return BadRequest(result.Errors);
+
+        return Ok(new { success = result.Success , token = result.token });
     }
 }

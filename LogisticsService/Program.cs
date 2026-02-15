@@ -1,6 +1,15 @@
+using System.Text;
 using System.Text.Json.Serialization;
+using LogisticsService.Application.Interfaces;
+using LogisticsService.Application.Services;
 using LogisticsService.Infrastructure;
+using LogisticsService.Infrastructure.Interfaces;
+using LogisticsService.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
+using Shared.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,14 +31,67 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new()
     {
-        Title = "Identity Service",
+        Title = "Logistics Service",
         Version = "v1"
     });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header, // header
+        Description = "Enter 'Bearer' [space] and then your valid token.",
+        Name = "Authorization", // header name
+        Type = SecuritySchemeType.Http, // must be ApiKey for Bearer in header
+        BearerFormat = "JWT", // optional, indicates JWT tokens
+        Scheme = "bearer" // the "scheme" name
+    });
+    options.AddSecurityRequirement(document => new()
+    {
+        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+    });
 });
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = jwtSettings["Key"];
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true, // Ensure the token hasn't expired
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(secretKey)
+            ),
+        };
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine($"Auth failed: {context.Exception.Message}");
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                Console.WriteLine("Token successfully validated!");
+                return Task.CompletedTask;
+            }
+        };
+    });
+builder.Services.AddAuthorization();
 
-// Registeting services
-//builder.Services.AddScoped<IUserRepository, UserRepository>();
+// Registering my services
+builder.Services.AddScoped<ILoadsRepository, LoadsRepository>();
+builder.Services.AddScoped<ILoadsService, LoadsService>();
+
+// Registering Grpc service
+builder.Services.AddGrpcClient<IdentityService.IdentityServiceClient>(options =>
+{
+    options.Address = new Uri("https://localhost:7078");
+    //options.Address = new Uri("http://localhost:5138");
+});
 
 
 
@@ -41,12 +103,29 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity Service v1");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Logistics Service v1");
     });
 }
 
 
-
 app.UseHttpsRedirection();
+app.UseAuthentication(); 
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();
+
+
+/*"loadStatus": "Draft",
+"cargoType": "Dry",
+"location": "string",
+"pickupDate": "2026-02-15T06:46:20.047Z",
+"weight": 10,
+"delieveryLocation": "Location",
+"delieveryContact": "Contact",
+"delieveryInstructions": "Nothing Yet",
+"deliveryDate": "2026-02-15T06:46:20.047Z",
+"vehicleType": "Flatbed",
+"isDeleted": False,
+"createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+"createdDate": "2026-02-15T06:46:20.047Z"*/

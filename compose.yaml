@@ -11,3 +11,15 @@
       context: .
       dockerfile: IdentityService/Dockerfile
 
+  shipmentservice:
+    image: shipmentservice
+    build:
+      context: .
+      dockerfile: ShipmentService/Dockerfile
+
+  shared.contracts:
+    image: shared.contracts
+    build:
+      context: .
+      dockerfile: Shared.Contracts/Dockerfile
+
