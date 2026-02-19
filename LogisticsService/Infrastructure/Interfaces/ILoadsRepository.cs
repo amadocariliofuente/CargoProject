@@ -12,5 +12,5 @@ public interface ILoadsRepository
     
     Task<Loads?> UpdateLoadAsync(Loads loads, CancellationToken token);
     
-    Task<bool> DeleteLoadAsync(Guid loadId, Guid UserId, CancellationToken token);
+    Task<bool> DeleteLoadAsync(Guid loadId, Guid userId, CancellationToken token);
 }

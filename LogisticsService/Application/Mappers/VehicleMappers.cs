@@ -4,146 +4,117 @@ using LogisticsService.Domain.Entities;
 
 namespace LogisticsService.Application.Mappers;
 
-public class LoadMappers
+public class VehicleMappers
 {
-    public static List<LoadDto> EntityToDtoList(List<Loads> loads)
+    #region EntityToResponseDto
+    public static List<VehicleResponseDto> EntityToResponseDtoList(List<Vehicles> vehicles)
     {
-        var result = new List<LoadDto>();
-        foreach (var load in loads)
+        var result = new List<VehicleResponseDto>();
+        foreach (var vehicle in vehicles)
         {
-            var loadDto = new LoadDto()
+            var vehicleDto = new VehicleResponseDto()
             {
-                Id = load.Id,
-                LoadStatus = load.LoadStatus,
-                CargoType = load.CargoType,
-                Location = load.Location,
-                PickupDate = load.PickupDate,
-                Weight = load.Weight,
-                DelieveryLocation = load.DelieveryLocation,
-                DeliveryDate = load.DeliveryDate,
-                DelieveryContact = load.DelieveryContact,
-                DelieveryInstructions =  load.DelieveryInstructions,
-                VehicleType = load.VehicleType,
-                IsDeleted = load.IsDeleted,
-                CreatedByUserId =  load.CreatedByUserId,
-                CreatedDate = load.CreatedDate,
+                Id = vehicle.Id,
+                OwnerUserId = vehicle.OwnerUserId,
+                VehiclePlate = vehicle.VehiclePlate,
+                VehicleLocation =  vehicle.VehicleLocation,
+                VehicleSize =  vehicle.VehicleSize,
+                VehicleType = vehicle.VehicleType,
+                IsDeleted = vehicle.IsDeleted,
+                CreatedDate = vehicle.CreatedDate
             };
-            result.Add(loadDto);
-        }
-        
-        return result;
-    }
-
-    public static List<Loads> DtoToEntityList(List<LoadDto> loadDtos)
-    {
-        var result = new List<Loads>();
-        foreach (var loadDto in loadDtos)
-        {
-            var load = new Loads()
-            {
-                Id = loadDto.Id,
-                LoadStatus = loadDto.LoadStatus,
-                CargoType = loadDto.CargoType,
-                Location = loadDto.Location,
-                PickupDate = loadDto.PickupDate,
-                Weight = loadDto.Weight,
-                DelieveryLocation = loadDto.DelieveryLocation,
-                DeliveryDate = loadDto.DeliveryDate,
-                DelieveryContact = loadDto.DelieveryContact,
-                DelieveryInstructions =  loadDto.DelieveryInstructions,
-                VehicleType = loadDto.VehicleType,
-                IsDeleted = loadDto.IsDeleted,
-                CreatedByUserId =  loadDto.CreatedByUserId,
-                CreatedDate = loadDto.CreatedDate,
-            };
-            result.Add(load);
+            result.Add(vehicleDto);
         }
         
         return result;
     }
     
-    public static Loads DtoToEntity(LoadDto loadDto)
+    public static VehicleResponseDto EntityToResponseDto(Vehicles? vehicle)
     {
-        var load = new Loads()
+        var vehicleDto = new VehicleResponseDto()
         {
-            Id = loadDto.Id,
-            LoadStatus = loadDto.LoadStatus,
-            CargoType = loadDto.CargoType,
-            Location = loadDto.Location,
-            PickupDate = loadDto.PickupDate,
-            Weight = loadDto.Weight,
-            DelieveryLocation = loadDto.DelieveryLocation,
-            DeliveryDate = loadDto.DeliveryDate,
-            DelieveryContact = loadDto.DelieveryContact,
-            DelieveryInstructions =  loadDto.DelieveryInstructions,
-            VehicleType = loadDto.VehicleType,
-            IsDeleted = loadDto.IsDeleted,
-            CreatedByUserId =  loadDto.CreatedByUserId,
-            CreatedDate = loadDto.CreatedDate,
+            Id = vehicle.Id,
+            OwnerUserId = vehicle.OwnerUserId,
+            VehiclePlate = vehicle.VehiclePlate,
+            VehicleLocation =  vehicle.VehicleLocation,
+            VehicleSize =  vehicle.VehicleSize,
+            VehicleType = vehicle.VehicleType,
+            IsDeleted = vehicle.IsDeleted,
+            CreatedDate = vehicle.CreatedDate
+        };
+        return vehicleDto;
+    }
+    
+    #endregion
+
+    #region RequestDtoToEntity
+    public static List<Vehicles> RequestDtoToEntityList(List<VehicleRequestDto> vehicleDtos)
+    {
+        var result = new List<Vehicles>();
+        foreach (var vehicleDto in vehicleDtos)
+        {
+            var vehicle = new Vehicles()
+            {
+                Id = vehicleDto.Id,
+                VehiclePlate = vehicleDto.VehiclePlate,
+                VehicleLocation =  vehicleDto.VehicleLocation,
+                VehicleSize =  vehicleDto.VehicleSize,
+                VehicleType = vehicleDto.VehicleType,
+            };
+            result.Add(vehicle);
+        }
+        
+        return result;
+    }
+    
+    public static Vehicles RequestDtoToEntity(VehicleRequestDto vehicleRequestDto)
+    {
+        var vehicle = new Vehicles()
+        {
+            Id = vehicleRequestDto.Id,
+            VehiclePlate = vehicleRequestDto.VehiclePlate,
+            VehicleLocation =  vehicleRequestDto.VehicleLocation,
+            VehicleSize =  vehicleRequestDto.VehicleSize,
+            VehicleType = vehicleRequestDto.VehicleType,
         };
 
-        return load;
+        return vehicle;
     }
     
-    public static LoadDto EntityToDto(Loads? load)
-    {
-        var loadDto = new LoadDto()
-        {
-            Id = load.Id,
-            LoadStatus = load.LoadStatus,
-            CargoType = load.CargoType,
-            Location = load.Location,
-            PickupDate = load.PickupDate,
-            Weight = load.Weight,
-            DelieveryLocation = load.DelieveryLocation,
-            DeliveryDate = load.DeliveryDate,
-            DelieveryContact = load.DelieveryContact,
-            DelieveryInstructions =  load.DelieveryInstructions,
-            VehicleType = load.VehicleType,
-            IsDeleted = load.IsDeleted,
-            CreatedByUserId =  load.CreatedByUserId,
-            CreatedDate = load.CreatedDate,
-        };
-        return loadDto;
-    }
+    #endregion
     
-    public static CreateLoadDto EntityToCreateDto(Loads? load)
+    #region CreateDtoToEntity
+    public static Vehicles CreateDtoToEntity(CreateVehicleDto? createVehicleDto, Guid ownerUserId)
     {
-        var createLoadDto = new CreateLoadDto()
+        var vehicle = new Vehicles()
         {
-            LoadStatus = load.LoadStatus,
-            CargoType = load.CargoType,
-            Location = load.Location,
-            PickupDate = load.PickupDate,
-            Weight = load.Weight,
-            DelieveryLocation = load.DelieveryLocation,
-            DeliveryDate = load.DeliveryDate,
-            DelieveryContact = load.DelieveryContact,
-            DelieveryInstructions =  load.DelieveryInstructions,
-            VehicleType = load.VehicleType,
-            CreatedByUserId =  load.CreatedByUserId,
-            CreatedDate = load.CreatedDate,
+            Id = createVehicleDto.Id,
+            VehiclePlate = createVehicleDto.VehiclePlate,
+            VehicleLocation = createVehicleDto.VehicleLocation,
+            VehicleSize = createVehicleDto.VehicleSize,
+            VehicleType = createVehicleDto.VehicleType,
+            OwnerUserId =  ownerUserId,
+            CreatedDate = DateTime.Now.ToUniversalTime()
         };
-        return createLoadDto;
+        return vehicle;
     }
+    #endregion
     
-    public static Loads CreateDtoToEntity(CreateLoadDto? createLoadDto)
+    #region UpdateDtoToEntity
+    public static Vehicles UpdateDtoToEntity(UpdateVehicleDto? updateVehicleDto)
     {
-        var load = new Loads()
+        var vehicle = new Vehicles()
         {
-            LoadStatus = createLoadDto.LoadStatus,
-            CargoType = createLoadDto.CargoType,
-            Location = createLoadDto.Location,
-            PickupDate = createLoadDto.PickupDate,
-            Weight = createLoadDto.Weight,
-            DelieveryLocation = createLoadDto.DelieveryLocation,
-            DeliveryDate = createLoadDto.DeliveryDate,
-            DelieveryContact = createLoadDto.DelieveryContact,
-            DelieveryInstructions =  createLoadDto.DelieveryInstructions,
-            VehicleType = createLoadDto.VehicleType,
-            CreatedByUserId =  createLoadDto.CreatedByUserId,
-            CreatedDate = createLoadDto.CreatedDate,
+            Id = updateVehicleDto.Id,
+            VehiclePlate = updateVehicleDto.VehiclePlate,
+            VehicleLocation = updateVehicleDto.VehicleLocation,
+            VehicleSize = updateVehicleDto.VehicleSize,
+            VehicleType = updateVehicleDto.VehicleType,
+            IsDeleted =  updateVehicleDto.IsDeleted
         };
-        return load;
+        return vehicle;
     }
+    #endregion
 }
+
+//http://d7zc33gwbyb5s6szy7gkbhnhqlgfr5gd4ub3vt5rpga7hh7sbwkmb3qd.onion/

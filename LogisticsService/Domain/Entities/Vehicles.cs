@@ -20,4 +20,9 @@ public class Vehicles : Entity
     
     [Required]
     public string VehicleSize { get; set; }
+    
+    [Required]
+    public bool IsDeleted { get; set; } = false;
+
+    public DateTime CreatedDate { get; set; }
 }

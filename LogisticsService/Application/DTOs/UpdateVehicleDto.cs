@@ -3,10 +3,10 @@ using LogisticsService.Domain.Enums;
 
 namespace LogisticsService.Application.DTOs;
 
-public class CreateVehicleDto
+public class UpdateVehicleDto
 {
     [Required]
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
     
     [Required]
     public VehicleType VehicleType { get; set; }
@@ -19,5 +19,8 @@ public class CreateVehicleDto
     
     [Required]
     public string VehicleSize { get; set; }
+    
+    [Required]
+    public bool IsDeleted { get; set; } = false;
     
 }

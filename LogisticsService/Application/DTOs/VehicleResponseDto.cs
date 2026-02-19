@@ -3,13 +3,13 @@ using LogisticsService.Domain.Enums;
 
 namespace LogisticsService.Application.DTOs;
 
-public class VehicleRequestDto
+public class VehicleResponseDto
 {
     [Required]
     public Guid Id { get; set; }
 
-    /*[Required]
-    public Guid OwnerUserId  { get; set; }*/
+    [Required]
+    public Guid OwnerUserId  { get; set; }
     
     [Required]
     public string OwnerUserEmail { get; set; }

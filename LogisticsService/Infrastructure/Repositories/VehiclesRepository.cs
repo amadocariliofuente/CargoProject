@@ -5,58 +5,55 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LogisticsService.Infrastructure.Repositories;
 
-public class LoadsRepository(LogisticsDbContext logisticsContext) : ILoadsRepository
+public class VehiclesRepository(LogisticsDbContext logisticsContext) : IVehiclesRepository
 {
     private readonly LogisticsDbContext _logisticsContext = logisticsContext;
     
-    public Task<List<Loads>> GetAllLoadsAsync(CancellationToken token)
+    public Task<List<Vehicles>> GetAllVehiclesAsync(CancellationToken token)
     {
-        return _logisticsContext.Loads.ToListAsync(token);
+        return _logisticsContext.Vehicles
+            .Where(l => l.IsDeleted == false)
+            .ToListAsync(token);
     }
 
-    public async Task<Loads?> GetLoadsAsync(Guid loadId, CancellationToken token)
+    public async Task<Vehicles?> GetVehiclesAsync(Guid loadId, CancellationToken token)
     {
-        return await _logisticsContext.Loads.FirstOrDefaultAsync(l => l.Id == loadId, token);
+        return await _logisticsContext.Vehicles.FirstOrDefaultAsync(l => l.Id == loadId, token);
     }
 
-    public async Task<Loads> CreateLoadAsync(Loads loads, CancellationToken token)
+    public async Task<Vehicles> CreateVehiclesAsync(Vehicles vehicles, CancellationToken token)
     {
-        await _logisticsContext.Loads.AddAsync(loads, token);
+        await _logisticsContext.Vehicles.AddAsync(vehicles, token);
         await _logisticsContext.SaveChangesAsync(token);
-        return loads;
+        return vehicles;
     }
 
-    public async Task<Loads?> UpdateLoadAsync(Loads load, CancellationToken token)
+    public async Task<Vehicles?> UpdateVehiclesAsync(Vehicles vehicles, CancellationToken token)
     {
-        var currentLoad =  await _logisticsContext.Loads.FirstOrDefaultAsync(l => l.Id == load.Id, token);
-        if (currentLoad != null)
+        var currentVehicle =  await _logisticsContext.Vehicles.FirstOrDefaultAsync(l => l.Id == vehicles.Id, token);
+        if (currentVehicle != null)
         {
-            currentLoad.LoadStatus = load.LoadStatus;
-            currentLoad.CargoType = load.CargoType;
-            currentLoad.Location = load.Location;
-            currentLoad.PickupDate = load.PickupDate;
-            currentLoad.Weight = load.Weight;
-            currentLoad.DelieveryLocation = load.DelieveryLocation;
-            currentLoad.DelieveryContact = load.DelieveryContact;
-            currentLoad.DelieveryInstructions = load.DelieveryInstructions;
-            currentLoad.DeliveryDate = load.DeliveryDate;
-            currentLoad.VehicleType = load.VehicleType;
-            
+            currentVehicle.VehiclePlate = vehicles.VehiclePlate;
+            currentVehicle.VehicleLocation = vehicles.VehicleLocation;
+            currentVehicle.VehicleSize = vehicles.VehicleSize;
+            currentVehicle.IsDeleted = vehicles.IsDeleted;
+            currentVehicle.VehicleType = vehicles.VehicleType;
+
             await _logisticsContext.SaveChangesAsync(token);
         }
-        return currentLoad;
+        return currentVehicle;
     }
 
-    public async Task<bool> DeleteLoadAsync(Guid loadId, Guid userId, CancellationToken token)
+    public async Task<bool> DeleteVehiclesAsync(Guid vehicleId, Guid userId, CancellationToken token)
     {
-        var load = await _logisticsContext.Loads.FirstOrDefaultAsync(u => u.Id == loadId, token);
+        var vehicle = await _logisticsContext.Vehicles.FirstOrDefaultAsync(u => u.Id == vehicleId, token);
         
-        if (load == null || load.CreatedByUserId != userId)
+        if (vehicle == null || vehicle.OwnerUserId != userId)
         {
             return false;
         }
 
-        load.IsDeleted = true;
+        vehicle.IsDeleted = true;
         return true;
     }
 }

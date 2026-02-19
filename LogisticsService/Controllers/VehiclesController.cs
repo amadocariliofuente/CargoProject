@@ -9,41 +9,43 @@ namespace LogisticsService.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class LoadsController(ILoadsService loadsService) : ControllerBase
+public class VehiclesController(IVehiclesService vehiclesService) : ControllerBase
 {
-    private readonly ILoadsService _loadsService = loadsService;
+    private readonly IVehiclesService _vehiclesService = vehiclesService;
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody]CreateLoadDto createLoadDto, CancellationToken token)
+    public async Task<IActionResult> Create([FromBody] CreateVehicleDto createVehicleDto, CancellationToken token)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userIdClaim is null)
             return Unauthorized();
-        
-        createLoadDto.CreatedByUserId = new Guid(userIdClaim);
-        
-        var result = await _loadsService.CreateLoadAsync(createLoadDto, token);
+
+        var ownerUserId = new Guid(userIdClaim);
+
+        var result = await _vehiclesService.CreateVehicleAsync(createVehicleDto, ownerUserId, token);
         return Ok(result.result); // RegisterUserDto returned
     }
 
-    [HttpGet("{loadId:guid}")]
-    public async Task<IActionResult> GetById(Guid loadId, CancellationToken token)
+    [HttpGet("{vehicleId:guid}")]
+    public async Task<IActionResult> GetById(Guid vehicleId, CancellationToken token)
     {
-        var loadDto = await _loadsService.GetLoadsAsync(loadId, token);
-        if(loadDto == null)
+        var vehicleDto = await _vehiclesService.GetVehiclesAsync(vehicleId, token);
+        if (vehicleDto == null)
             return NotFound();
-        return Ok(loadDto);
+        return Ok(vehicleDto);
     }
-    
-    [HttpPut("{loadId:guid}")]
-    public async Task<IActionResult> Update(Guid loadId, [FromBody] LoadDto dto, CancellationToken token)
+
+    [HttpPut("{vehicleId:guid}")]
+    public async Task<IActionResult> Update(Guid vehicleId, [FromBody] UpdateVehicleDto requestDto,
+        CancellationToken token)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        if (userId is null || loadId != dto.Id)
+        var vehicle = await _vehiclesService.GetVehiclesAsync(vehicleId, token);
+        
+        if (userId is null || vehicleId != requestDto.Id || userId != vehicle?.OwnerUserId.ToString())
             return Unauthorized();
 
-        var updated = await _loadsService.UpdateLoadAsync(dto, token);
+        var updated = await vehiclesService.UpdateVehicleAsync(requestDto, token);
 
         if (updated == null)
             return NotFound();
@@ -51,16 +53,17 @@ public class LoadsController(ILoadsService loadsService) : ControllerBase
         return Ok(updated);
     }
     
-    [HttpDelete("{loadId:guid}")]
-    public async Task<IActionResult> Delete(Guid loadId, CancellationToken token)
+    [HttpDelete("{vehicleId:guid}")]
+    public async Task<IActionResult> Delete(Guid vehicleId, CancellationToken token)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        if (userIdClaim is null)
+        var vehicle = await _vehiclesService.GetVehiclesAsync(vehicleId, token);
+        
+        if (userIdClaim is null || userIdClaim !=  vehicle?.OwnerUserId.ToString())
             return Unauthorized();
 
         var userId = Guid.Parse(userIdClaim);
-        var success = await _loadsService.DeleteLoadAsync(loadId, userId, token);
+        var success = await vehiclesService.DeleteVehicleAsync(vehicleId, userId, token);
 
         if (!success)
             return NotFound();

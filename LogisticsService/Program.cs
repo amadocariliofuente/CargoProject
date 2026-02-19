@@ -85,6 +85,8 @@ builder.Services.AddAuthorization();
 // Registering my services
 builder.Services.AddScoped<ILoadsRepository, LoadsRepository>();
 builder.Services.AddScoped<ILoadsService, LoadsService>();
+builder.Services.AddScoped<IVehiclesRepository, VehiclesRepository>();
+builder.Services.AddScoped<IVehiclesService, VehiclesService>();
 
 // Registering Grpc service
 builder.Services.AddGrpcClient<IdentityService.IdentityServiceClient>(options =>
@@ -129,3 +131,6 @@ app.Run();
 "isDeleted": False,
 "createdByUserId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
 "createdDate": "2026-02-15T06:46:20.047Z"*/
+
+
+// 0x7Ff8bbf9C8AB106db589e7863fb100525F61CCe5

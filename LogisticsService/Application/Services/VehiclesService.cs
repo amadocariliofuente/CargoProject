@@ -6,54 +6,59 @@ using Shared.Contracts;
 
 namespace LogisticsService.Application.Services;
 
-public class LoadsService(ILoadsRepository loadsRepository, IdentityService.IdentityServiceClient identityClient) : ILoadsService
+public class VehiclesService(IVehiclesRepository vehiclesRepository, IdentityService.IdentityServiceClient identityClient) : IVehiclesService
 {
-    private readonly ILoadsRepository _loadsRepository = loadsRepository;
+    private readonly IVehiclesRepository _vehiclesRepository = vehiclesRepository;
     private readonly IdentityService.IdentityServiceClient _identityClient = identityClient;
     
-    public async Task<List<LoadDto>> GetAllLoadsAsync(CancellationToken token)
+    public async Task<List<VehicleResponseDto>> GetAllVehiclesAsync(CancellationToken token)
     {
-        var loads = await _loadsRepository.GetAllLoadsAsync(token);
-        var loadDtos = LoadMappers.EntityToDtoList(loads);
+        var vehicles = await _vehiclesRepository.GetAllVehiclesAsync(token);
+        var vehiclesDtos = VehicleMappers.EntityToResponseDtoList(vehicles);
         
-        return loadDtos;
+        return vehiclesDtos;
     }
 
-    public async Task<LoadDto?> GetLoadsAsync(Guid loadId, CancellationToken token)
+    public async Task<VehicleResponseDto?> GetVehiclesAsync(Guid vehicleId, CancellationToken token)
     {
-        var load = await _loadsRepository.GetLoadsAsync(loadId, token);
-        var loadDto = LoadMappers.EntityToDto(load);
+        var vehicle = await _vehiclesRepository.GetVehiclesAsync(vehicleId, token);
+
+        if (vehicle.IsDeleted)
+        {
+            return null;
+        }
+        var vehicleDto = VehicleMappers.EntityToResponseDto(vehicle);
         
         // Getting owner user's email
-        var userMail = await GetUserEmailAsync(loadDto.CreatedByUserId);
-        loadDto.CreatedbyUserEmail = userMail;
+        var userMail = await GetUserEmailAsync(vehicleDto.OwnerUserId);
+        vehicleDto.OwnerUserEmail = userMail;
         
-        return loadDto;
+        return vehicleDto;
     }
 
-    public async Task<(LoadDto, bool result)> CreateLoadAsync(CreateLoadDto loads, CancellationToken token)
+    public async Task<(VehicleResponseDto, bool result)> CreateVehicleAsync(CreateVehicleDto vehicles, Guid ownerUserId, CancellationToken token)
     {
-        var load = LoadMappers.CreateDtoToEntity(loads);
-        var result = await _loadsRepository.CreateLoadAsync(load, token);
-        var loadDto = LoadMappers.EntityToDto(result);
+        var vehicle = VehicleMappers.CreateDtoToEntity(vehicles, ownerUserId);
+        var result = await _vehiclesRepository.CreateVehiclesAsync(vehicle, token);
+        var vehicleDto = VehicleMappers.EntityToResponseDto(result);
         
         // Some validation logic here, should be written later  ... 
         
-        return (loadDto, true);
+        return (vehicleDto, true);
     }
 
-    public async Task<LoadDto?> UpdateLoadAsync(LoadDto loads, CancellationToken token)
+    public async Task<VehicleResponseDto?> UpdateVehicleAsync(UpdateVehicleDto vehiclesRequest, CancellationToken token)
     {
-        var load = LoadMappers.DtoToEntity(loads);
-        var result = await _loadsRepository.UpdateLoadAsync(load, token);
-        var loadDto = LoadMappers.EntityToDto(result);
+        var vehicle = VehicleMappers.UpdateDtoToEntity(vehiclesRequest);
+        var result = await _vehiclesRepository.UpdateVehiclesAsync(vehicle, token);
+        var vehicleDto = VehicleMappers.EntityToResponseDto(result);
         
-        return loadDto;
+        return vehicleDto;
     }
 
-    public async Task<bool> DeleteLoadAsync(Guid loadId, Guid userId,CancellationToken token)
+    public async Task<bool> DeleteVehicleAsync(Guid vehicleId, Guid userId,CancellationToken token)
     {
-        var result = await _loadsRepository.DeleteLoadAsync(loadId, userId, token);
+        var result = await _vehiclesRepository.DeleteVehiclesAsync(vehicleId, userId, token);
         return result;
     }
     

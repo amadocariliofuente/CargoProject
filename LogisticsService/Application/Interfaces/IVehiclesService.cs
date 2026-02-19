@@ -2,15 +2,15 @@ using LogisticsService.Application.DTOs;
 
 namespace LogisticsService.Application.Interfaces;
 
-public interface ILoadsService
+public interface IVehiclesService
 {
-    Task<List<LoadDto>>  GetAllLoadsAsync(CancellationToken token);
+    Task<List<VehicleResponseDto>>  GetAllVehiclesAsync(CancellationToken token);
     
-    Task<LoadDto?> GetLoadsAsync(Guid loadId, CancellationToken token);
+    Task<VehicleResponseDto?> GetVehiclesAsync(Guid vehicleId, CancellationToken token);
     
-    Task<(LoadDto, bool result)> CreateLoadAsync(CreateLoadDto loads, CancellationToken token);
+    Task<(VehicleResponseDto, bool result)> CreateVehicleAsync(CreateVehicleDto vehicles, Guid ownerUserId, CancellationToken token);
     
-    Task<LoadDto?> UpdateLoadAsync(LoadDto loads, CancellationToken token);
+    Task<VehicleResponseDto?> UpdateVehicleAsync(UpdateVehicleDto vehiclesRequest, CancellationToken token);
     
-    Task<bool> DeleteLoadAsync(Guid loadId, Guid userId, CancellationToken token);
+    Task<bool> DeleteVehicleAsync(Guid vehicleId, Guid userId, CancellationToken token);
 }
