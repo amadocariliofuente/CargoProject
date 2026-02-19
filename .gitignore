@@ -1,4 +1,2 @@
-IdentityService/obj
-IdentityService/bin
-LogisticsService/obj
-LogisticsService/bin
+**/bin/
+**/obj/
