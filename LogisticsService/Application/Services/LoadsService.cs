@@ -11,18 +11,33 @@ public class LoadsService(ILoadsRepository loadsRepository, IdentityService.Iden
     private readonly ILoadsRepository _loadsRepository = loadsRepository;
     private readonly IdentityService.IdentityServiceClient _identityClient = identityClient;
     
-    public async Task<List<LoadDto>> GetAllLoadsAsync(CancellationToken token)
+    public async Task<List<LoadResponseDto>> GetAllLoadsAsync(CancellationToken token)
     {
         var loads = await _loadsRepository.GetAllLoadsAsync(token);
-        var loadDtos = LoadMappers.EntityToDtoList(loads);
+        if (loads.Any())
+            return new List<LoadResponseDto>();
+        
+        var loadDtos = LoadMappers.EntityToResponseDtoList(loads);
+
+        foreach (var loadDto in loadDtos)
+        {
+            // Getting owner user's email
+            var userMail = await GetUserEmailAsync(loadDto.CreatedByUserId);
+            loadDto.CreatedbyUserEmail = userMail;
+        }
         
         return loadDtos;
     }
 
-    public async Task<LoadDto?> GetLoadsAsync(Guid loadId, CancellationToken token)
+    public async Task<LoadResponseDto?> GetLoadAsync(Guid loadId, CancellationToken token)
     {
         var load = await _loadsRepository.GetLoadsAsync(loadId, token);
-        var loadDto = LoadMappers.EntityToDto(load);
+        if (load is null)
+        {
+            return null;
+        }
+        
+        var loadDto = LoadMappers.EntityToResponseDto(load);
         
         // Getting owner user's email
         var userMail = await GetUserEmailAsync(loadDto.CreatedByUserId);
@@ -31,22 +46,24 @@ public class LoadsService(ILoadsRepository loadsRepository, IdentityService.Iden
         return loadDto;
     }
 
-    public async Task<(LoadDto, bool result)> CreateLoadAsync(CreateLoadDto loads, CancellationToken token)
+    public async Task<(LoadResponseDto, bool result)> CreateLoadAsync(CreateLoadDto loads, Guid createdByUserId, CancellationToken token)
     {
-        var load = LoadMappers.CreateDtoToEntity(loads);
+        var load = LoadMappers.CreateDtoToEntity(loads, createdByUserId);
         var result = await _loadsRepository.CreateLoadAsync(load, token);
-        var loadDto = LoadMappers.EntityToDto(result);
+        var loadDto = LoadMappers.EntityToResponseDto(result);
         
-        // Some validation logic here, should be written later  ... 
+        // Getting owner user's email
+        var userMail = await GetUserEmailAsync(loadDto.CreatedByUserId);
+        loadDto.CreatedbyUserEmail = userMail;
         
         return (loadDto, true);
     }
 
-    public async Task<LoadDto?> UpdateLoadAsync(LoadDto loads, CancellationToken token)
+    public async Task<LoadResponseDto?> UpdateLoadAsync(UpdateLoadDto loadsResponse, Guid loadId, CancellationToken token)
     {
-        var load = LoadMappers.DtoToEntity(loads);
+        var load = LoadMappers.UpdateDtoToEntity(loadsResponse, loadId);
         var result = await _loadsRepository.UpdateLoadAsync(load, token);
-        var loadDto = LoadMappers.EntityToDto(result);
+        var loadDto = LoadMappers.EntityToResponseDto(result);
         
         return loadDto;
     }

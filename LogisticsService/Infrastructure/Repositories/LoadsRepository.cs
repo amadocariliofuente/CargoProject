@@ -11,12 +11,18 @@ public class LoadsRepository(LogisticsDbContext logisticsContext) : ILoadsReposi
     
     public Task<List<Loads>> GetAllLoadsAsync(CancellationToken token)
     {
-        return _logisticsContext.Loads.ToListAsync(token);
+        return _logisticsContext.Loads
+            .AsNoTracking()
+            .Where(l => l.IsDeleted == false)
+            .ToListAsync(token);
     }
 
     public async Task<Loads?> GetLoadsAsync(Guid loadId, CancellationToken token)
     {
-        return await _logisticsContext.Loads.FirstOrDefaultAsync(l => l.Id == loadId, token);
+        return await _logisticsContext.Loads
+            .AsNoTracking()
+            .Where(l => l.IsDeleted == false)
+            .FirstOrDefaultAsync(l => l.Id == loadId, token);
     }
 
     public async Task<Loads> CreateLoadAsync(Loads loads, CancellationToken token)

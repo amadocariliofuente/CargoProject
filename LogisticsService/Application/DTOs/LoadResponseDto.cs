@@ -3,7 +3,7 @@ using LogisticsService.Domain.Enums;
 
 namespace LogisticsService.Application.DTOs;
 
-public class LoadDto
+public class LoadResponseDto
 {
     public Guid Id { get; set; }
     

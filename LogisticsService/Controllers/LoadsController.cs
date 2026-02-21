@@ -13,6 +13,24 @@ public class LoadsController(ILoadsService loadsService) : ControllerBase
 {
     private readonly ILoadsService _loadsService = loadsService;
 
+    [HttpGet("{loadId:guid}")]
+    public async Task<IActionResult> GetById(Guid loadId, CancellationToken token)
+    {
+        var loadDto = await _loadsService.GetLoadAsync(loadId, token);
+        if(loadDto == null)
+            return NotFound();
+        return Ok(loadDto);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetAll(CancellationToken token)
+    {
+        var loadDtos = await _loadsService.GetAllLoadsAsync(token);
+        if(!loadDtos.Any())
+            return NotFound();
+        return Ok(loadDtos);
+    }
+    
     [HttpPost]
     public async Task<IActionResult> Create([FromBody]CreateLoadDto createLoadDto, CancellationToken token)
     {
@@ -20,30 +38,28 @@ public class LoadsController(ILoadsService loadsService) : ControllerBase
         if (userIdClaim is null)
             return Unauthorized();
         
-        createLoadDto.CreatedByUserId = new Guid(userIdClaim);
+        var createdByUserId = new Guid(userIdClaim);
         
-        var result = await _loadsService.CreateLoadAsync(createLoadDto, token);
-        return Ok(result.result); // RegisterUserDto returned
-    }
-
-    [HttpGet("{loadId:guid}")]
-    public async Task<IActionResult> GetById(Guid loadId, CancellationToken token)
-    {
-        var loadDto = await _loadsService.GetLoadsAsync(loadId, token);
-        if(loadDto == null)
-            return NotFound();
-        return Ok(loadDto);
+        var result = await _loadsService.CreateLoadAsync(createLoadDto, createdByUserId, token);
+        
+        if (!result.result)
+        {
+            return BadRequest("Error when creating Loads.");
+        }
+        
+        return Ok(result.Item1); // LoadResponseDto returned
     }
     
     [HttpPut("{loadId:guid}")]
-    public async Task<IActionResult> Update(Guid loadId, [FromBody] LoadDto dto, CancellationToken token)
+    public async Task<IActionResult> Update(Guid loadId, [FromBody] UpdateLoadDto updateLoadDto, CancellationToken token)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        if (userId is null || loadId != dto.Id)
+        var load = await _loadsService.GetLoadAsync(loadId, token);
+        
+        if (userId is null || load!.CreatedByUserId.ToString() != userId)
             return Unauthorized();
 
-        var updated = await _loadsService.UpdateLoadAsync(dto, token);
+        var updated = await _loadsService.UpdateLoadAsync(updateLoadDto, loadId, token);
 
         if (updated == null)
             return NotFound();
@@ -55,8 +71,9 @@ public class LoadsController(ILoadsService loadsService) : ControllerBase
     public async Task<IActionResult> Delete(Guid loadId, CancellationToken token)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        if (userIdClaim is null)
+        var load = await _loadsService.GetLoadAsync(loadId, token);
+        
+        if (userIdClaim is null|| load!.CreatedByUserId.ToString() != userIdClaim)
             return Unauthorized();
 
         var userId = Guid.Parse(userIdClaim);
@@ -65,6 +82,6 @@ public class LoadsController(ILoadsService loadsService) : ControllerBase
         if (!success)
             return NotFound();
 
-        return Ok();
+        return Ok(success);
     }
 }

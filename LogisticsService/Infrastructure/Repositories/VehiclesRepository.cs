@@ -12,13 +12,17 @@ public class VehiclesRepository(LogisticsDbContext logisticsContext) : IVehicles
     public Task<List<Vehicles>> GetAllVehiclesAsync(CancellationToken token)
     {
         return _logisticsContext.Vehicles
+            .AsNoTracking()
             .Where(l => l.IsDeleted == false)
             .ToListAsync(token);
     }
 
     public async Task<Vehicles?> GetVehiclesAsync(Guid loadId, CancellationToken token)
     {
-        return await _logisticsContext.Vehicles.FirstOrDefaultAsync(l => l.Id == loadId, token);
+        return await _logisticsContext.Vehicles
+            .AsNoTracking()
+            .Where(l => l.IsDeleted == false)
+            .FirstOrDefaultAsync(l => l.Id == loadId, token);
     }
 
     public async Task<Vehicles> CreateVehiclesAsync(Vehicles vehicles, CancellationToken token)
@@ -36,7 +40,6 @@ public class VehiclesRepository(LogisticsDbContext logisticsContext) : IVehicles
             currentVehicle.VehiclePlate = vehicles.VehiclePlate;
             currentVehicle.VehicleLocation = vehicles.VehicleLocation;
             currentVehicle.VehicleSize = vehicles.VehicleSize;
-            currentVehicle.IsDeleted = vehicles.IsDeleted;
             currentVehicle.VehicleType = vehicles.VehicleType;
 
             await _logisticsContext.SaveChangesAsync(token);

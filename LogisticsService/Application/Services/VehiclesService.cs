@@ -14,7 +14,18 @@ public class VehiclesService(IVehiclesRepository vehiclesRepository, IdentitySer
     public async Task<List<VehicleResponseDto>> GetAllVehiclesAsync(CancellationToken token)
     {
         var vehicles = await _vehiclesRepository.GetAllVehiclesAsync(token);
+        if (!vehicles.Any())
+        {
+            return new List<VehicleResponseDto>();
+        }
+        
         var vehiclesDtos = VehicleMappers.EntityToResponseDtoList(vehicles);
+
+        foreach (var vehicleDto in vehiclesDtos)
+        {
+            var userMail = await GetUserEmailAsync(vehicleDto.OwnerUserId);
+            vehicleDto.OwnerUserEmail = userMail;
+        }
         
         return vehiclesDtos;
     }
@@ -22,11 +33,11 @@ public class VehiclesService(IVehiclesRepository vehiclesRepository, IdentitySer
     public async Task<VehicleResponseDto?> GetVehiclesAsync(Guid vehicleId, CancellationToken token)
     {
         var vehicle = await _vehiclesRepository.GetVehiclesAsync(vehicleId, token);
-
-        if (vehicle.IsDeleted)
+        if (vehicle!.IsDeleted)
         {
             return null;
         }
+        
         var vehicleDto = VehicleMappers.EntityToResponseDto(vehicle);
         
         // Getting owner user's email
@@ -47,9 +58,9 @@ public class VehiclesService(IVehiclesRepository vehiclesRepository, IdentitySer
         return (vehicleDto, true);
     }
 
-    public async Task<VehicleResponseDto?> UpdateVehicleAsync(UpdateVehicleDto vehiclesRequest, CancellationToken token)
+    public async Task<VehicleResponseDto?> UpdateVehicleAsync(UpdateVehicleDto vehiclesRequest, Guid vehicleId, CancellationToken token)
     {
-        var vehicle = VehicleMappers.UpdateDtoToEntity(vehiclesRequest);
+        var vehicle = VehicleMappers.UpdateDtoToEntity(vehiclesRequest, vehicleId);
         var result = await _vehiclesRepository.UpdateVehiclesAsync(vehicle, token);
         var vehicleDto = VehicleMappers.EntityToResponseDto(result);
         

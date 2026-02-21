@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.JavaScript;
 using System.Security.Claims;
 using LogisticsService.Application.DTOs;
 using LogisticsService.Application.Interfaces;
@@ -13,6 +14,24 @@ public class VehiclesController(IVehiclesService vehiclesService) : ControllerBa
 {
     private readonly IVehiclesService _vehiclesService = vehiclesService;
 
+    [HttpGet("{vehicleId:guid}")]
+    public async Task<IActionResult> GetById(Guid vehicleId, CancellationToken token)
+    {
+        var vehicleDto = await _vehiclesService.GetVehiclesAsync(vehicleId, token);
+        if (vehicleDto == null)
+            return NotFound();
+        return Ok(vehicleDto);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetAll(CancellationToken token)
+    {
+        var vehicleDtos = await _vehiclesService.GetAllVehiclesAsync(token);
+        if (!vehicleDtos.Any())
+            return NotFound();
+        return Ok(vehicleDtos);
+    }
+    
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateVehicleDto createVehicleDto, CancellationToken token)
     {
@@ -23,16 +42,13 @@ public class VehiclesController(IVehiclesService vehiclesService) : ControllerBa
         var ownerUserId = new Guid(userIdClaim);
 
         var result = await _vehiclesService.CreateVehicleAsync(createVehicleDto, ownerUserId, token);
-        return Ok(result.result); // RegisterUserDto returned
-    }
-
-    [HttpGet("{vehicleId:guid}")]
-    public async Task<IActionResult> GetById(Guid vehicleId, CancellationToken token)
-    {
-        var vehicleDto = await _vehiclesService.GetVehiclesAsync(vehicleId, token);
-        if (vehicleDto == null)
-            return NotFound();
-        return Ok(vehicleDto);
+        
+        if (!result.result)
+        {
+            return BadRequest("Error when creating Vehicle.");
+        }
+        
+        return Ok(result.Item1); // VehicleResponseDto returned
     }
 
     [HttpPut("{vehicleId:guid}")]
@@ -42,10 +58,10 @@ public class VehiclesController(IVehiclesService vehiclesService) : ControllerBa
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var vehicle = await _vehiclesService.GetVehiclesAsync(vehicleId, token);
         
-        if (userId is null || vehicleId != requestDto.Id || userId != vehicle?.OwnerUserId.ToString())
+        if (userId is null || userId != vehicle?.OwnerUserId.ToString())
             return Unauthorized();
 
-        var updated = await vehiclesService.UpdateVehicleAsync(requestDto, token);
+        var updated = await vehiclesService.UpdateVehicleAsync(requestDto, vehicleId, token);
 
         if (updated == null)
             return NotFound();
@@ -68,6 +84,6 @@ public class VehiclesController(IVehiclesService vehiclesService) : ControllerBa
         if (!success)
             return NotFound();
 
-        return Ok();
+        return Ok(success);
     }
 }

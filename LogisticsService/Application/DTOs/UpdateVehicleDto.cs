@@ -6,9 +6,6 @@ namespace LogisticsService.Application.DTOs;
 public class UpdateVehicleDto
 {
     [Required]
-    public Guid Id { get; init; }
-    
-    [Required]
     public VehicleType VehicleType { get; set; }
     
     [Required]
@@ -19,8 +16,5 @@ public class UpdateVehicleDto
     
     [Required]
     public string VehicleSize { get; set; }
-    
-    [Required]
-    public bool IsDeleted { get; set; } = false;
     
 }

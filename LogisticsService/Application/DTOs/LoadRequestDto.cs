@@ -3,9 +3,12 @@ using LogisticsService.Domain.Enums;
 
 namespace LogisticsService.Application.DTOs;
 
-public class CreateLoadDto
+public class LoadRequestDto
 {
-    public LoadStatus LoadStatus { get; set; } = LoadStatus.Posted;
+    [Required]
+    public Guid Id { get; set; }
+    
+    public LoadStatus LoadStatus { get; set; }
     
     [Required]
     public CargoType CargoType { get; set; }
@@ -15,12 +18,11 @@ public class CreateLoadDto
     
     [Required]
     public DateTime PickupDate { get; set; }
-
-    [Required] 
-    public int Weight { get; set; } = 100;
+    
+    [Required]
+    public int Weight { get; set; }
     
     // Delievery Properties
-    
     [Required]
     public string DelieveryLocation { get; set; }
     
@@ -33,5 +35,6 @@ public class CreateLoadDto
     [Required]
     public DateTime DeliveryDate { get; set; }
     
-    public VehicleType VehicleType { get; set; }
+    public VehicleType VehicleType { get; set; } 
+    
 }

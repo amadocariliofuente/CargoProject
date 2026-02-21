@@ -88,7 +88,6 @@ public class VehicleMappers
     {
         var vehicle = new Vehicles()
         {
-            Id = createVehicleDto.Id,
             VehiclePlate = createVehicleDto.VehiclePlate,
             VehicleLocation = createVehicleDto.VehicleLocation,
             VehicleSize = createVehicleDto.VehicleSize,
@@ -101,16 +100,15 @@ public class VehicleMappers
     #endregion
     
     #region UpdateDtoToEntity
-    public static Vehicles UpdateDtoToEntity(UpdateVehicleDto? updateVehicleDto)
+    public static Vehicles UpdateDtoToEntity(UpdateVehicleDto? updateVehicleDto, Guid vehicleId)
     {
         var vehicle = new Vehicles()
         {
-            Id = updateVehicleDto.Id,
+            Id = vehicleId,
             VehiclePlate = updateVehicleDto.VehiclePlate,
             VehicleLocation = updateVehicleDto.VehicleLocation,
             VehicleSize = updateVehicleDto.VehicleSize,
             VehicleType = updateVehicleDto.VehicleType,
-            IsDeleted =  updateVehicleDto.IsDeleted
         };
         return vehicle;
     }

@@ -10,7 +10,7 @@ public interface IVehiclesService
     
     Task<(VehicleResponseDto, bool result)> CreateVehicleAsync(CreateVehicleDto vehicles, Guid ownerUserId, CancellationToken token);
     
-    Task<VehicleResponseDto?> UpdateVehicleAsync(UpdateVehicleDto vehiclesRequest, CancellationToken token);
+    Task<VehicleResponseDto?> UpdateVehicleAsync(UpdateVehicleDto vehiclesRequest, Guid vehicleId, CancellationToken token);
     
     Task<bool> DeleteVehicleAsync(Guid vehicleId, Guid userId, CancellationToken token);
 }

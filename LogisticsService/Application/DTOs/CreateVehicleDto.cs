@@ -6,9 +6,6 @@ namespace LogisticsService.Application.DTOs;
 public class CreateVehicleDto
 {
     [Required]
-    public Guid Id { get; set; }
-    
-    [Required]
     public VehicleType VehicleType { get; set; }
     
     [Required]
